@@ -1,0 +1,51 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Payroll{% endblock %}
+{% block page_title %}Payroll System{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+    <p class="text-2xl font-poppins font-bold text-green-600">Total: ₹{{ total|floatformat:"0" }}</p>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+    <table class="w-full text-sm">
+        <thead><tr class="border-b border-gray-100">
+            <th class="text-left py-2 px-3">Employee</th>
+            <th class="text-left py-2 px-3">Month</th>
+            <th class="text-right py-2 px-3">Basic</th>
+            <th class="text-right py-2 px-3">Bonus</th>
+            <th class="text-right py-2 px-3">Deductions</th>
+            <th class="text-right py-2 px-3">Net Pay</th>
+            <th class="text-center py-2 px-3">Status</th>
+            <th class="text-center py-2 px-3">Action</th>
+        </tr></thead>
+        <tbody>
+            {% for p in payroll %}
+            <tr class="border-b border-gray-50 hover:bg-orange-50">
+                <td class="py-2 px-3 font-medium">{{ p.employee }}</td>
+                <td class="py-2 px-3">{{ p.month }}</td>
+                <td class="py-2 px-3 text-right">₹{{ p.basic }}</td>
+                <td class="py-2 px-3 text-right">₹{{ p.bonus }}</td>
+                <td class="py-2 px-3 text-right">₹{{ p.deductions }}</td>
+                <td class="py-2 px-3 text-right font-bold">₹{{ p.net_pay }}</td>
+                <td class="py-2 px-3 text-center">
+                    <span class="px-2 py-1 rounded-full text-xs {% if p.status == 'Paid' %}bg-green-100 text-green-700{% else %}bg-yellow-100 text-yellow-700{% endif %}">{{ p.status }}</span>
+                </td>
+                <td class="py-2 px-3 text-center">
+                    {% if p.status == 'Pending' %}
+                    <form method="POST" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="employee_id" value="{{ p.id }}">
+                        <button type="submit" class="px-2 py-1 bg-primary text-white rounded text-xs">Pay</button>
+                    </form>
+                    {% else %}
+                    <span class="text-gray-400 text-xs">Paid {{ p.paid_date }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

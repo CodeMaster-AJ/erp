@@ -21,6 +21,8 @@ INSTALLED_APPS = [
     'sales',
     'finance',
     'crm',
+    'hr',
+    'compliance',
 ]
 
 MIDDLEWARE = [

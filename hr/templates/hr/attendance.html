@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Attendance{% endblock %}
+{% block page_title %}Attendance Tracking{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+    <table class="w-full text-sm">
+        <thead><tr class="border-b border-gray-100">
+            <th class="text-left py-2 px-3">Employee</th>
+            <th class="text-center py-2 px-3">Status</th>
+            <th class="text-center py-2 px-3">In Time</th>
+            <th class="text-center py-2 px-3">Out Time</th>
+        </tr></thead>
+        <tbody>
+            {% for a in attendance %}
+            <tr class="border-b border-gray-50 hover:bg-orange-50">
+                <td class="py-2 px-3 font-medium">{{ a.employee }}</td>
+                <td class="py-2 px-3 text-center">
+                    <span class="px-2 py-1 rounded-full text-xs {% if a.status == 'Present' %}bg-green-100 text-green-700{% elif a.status == 'Absent' %}bg-red-100 text-red-700{% else %}bg-yellow-100 text-yellow-700{% endif %}">{{ a.status }}</span>
+                </td>
+                <td class="py-2 px-3 text-center text-gray-600">{{ a.in_time }}</td>
+                <td class="py-2 px-3 text-center text-gray-600">{{ a.out_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

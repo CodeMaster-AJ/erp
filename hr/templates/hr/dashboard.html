@@ -1,0 +1,52 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}HR Dashboard{% endblock %}
+{% block page_title %}HR Dashboard{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <p class="text-gray-500 text-sm">Total Employees</p>
+        <p class="text-2xl font-poppins font-bold text-gray-800">{{ total }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-green-500">
+        <p class="text-gray-500 text-sm">Present Today</p>
+        <p class="text-2xl font-poppins font-bold text-green-600">{{ present }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-yellow-500">
+        <p class="text-gray-500 text-sm">On Leave</p>
+        <p class="text-2xl font-poppins font-bold text-yellow-600">{{ leave }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-red-500">
+        <p class="text-gray-500 text-sm">Pending Payroll</p>
+        <p class="text-2xl font-poppins font-bold text-red-600">{{ pending }}</p>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Employees by Village</h3>
+        <div class="h-48"><canvas id="villageChart"></canvas></div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Today's Attendance</h3>
+        <div class="flex items-center justify-center h-48">
+            <div class="text-center">
+                <p class="text-4xl font-poppins font-bold text-primary">{{ present }}/{{ total }}</p>
+                <p class="text-gray-500">Present Today</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const existing = Chart.getChart('villageChart');
+    if (existing) existing.destroy();
+    new Chart(document.getElementById('villageChart').getContext('2d'), {
+        type: 'bar',
+        data: { labels: {{ village_labels|safe }}, datasets: [{ label: 'Employees', data: {{ village_values }}, backgroundColor: '#F5A623', borderRadius: 6 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+</script>
+{% endblock %}

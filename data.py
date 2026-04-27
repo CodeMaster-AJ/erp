@@ -171,3 +171,47 @@ NEW_TRAINEES = []
 NEW_PROGRAMS = []
 
 NEW_SESSIONS = []
+
+ATTENDANCE = [
+    {"id": 1, "employee_id": 1, "employee": "Gurpreet Kaur", "date": "2025-04-25", "status": "Present", "in_time": "09:00", "out_time": "17:30"},
+    {"id": 2, "employee_id": 2, "employee": "Simran Sharma", "date": "2025-04-25", "status": "Present", "in_time": "09:15", "out_time": "17:00"},
+    {"id": 3, "employee_id": 3, "employee": "Manpreet Kaur", "date": "2025-04-25", "status": "Absent", "in_time": "-", "out_time": "-"},
+    {"id": 4, "employee_id": 4, "employee": "Rajwinder Singh", "date": "2025-04-25", "status": "Present", "in_time": "08:45", "out_time": "17:45"},
+    {"id": 5, "employee_id": 5, "employee": "Harmeet Kaur", "date": "2025-04-25", "status": "Half Day", "in_time": "09:00", "out_time": "13:00"},
+]
+
+PAYROLL = [
+    {"id": 1, "employee": "Gurpreet Kaur", "month": "April 2025", "basic": 18000, "bonus": 2000, "deductions": 1800, "net_pay": 18200, "status": "Paid", "paid_date": "2025-04-30"},
+    {"id": 2, "employee": "Simran Sharma", "month": "April 2025", "basic": 15000, "bonus": 1500, "deductions": 1500, "net_pay": 15000, "status": "Paid", "paid_date": "2025-04-30"},
+    {"id": 3, "employee": "Manpreet Kaur", "month": "April 2025", "basic": 9000, "bonus": 500, "deductions": 900, "net_pay": 8600, "status": "Pending", "paid_date": "-"},
+    {"id": 4, "employee": "Rajwinder Singh", "month": "April 2025", "basic": 13000, "bonus": 1000, "deductions": 1300, "net_pay": 12700, "status": "Paid", "paid_date": "2025-04-30"},
+    {"id": 5, "employee": "Harmeet Kaur", "month": "April 2025", "basic": 8500, "bonus": 0, "deductions": 425, "net_pay": 8075, "status": "Pending", "paid_date": "-"},
+]
+
+VOLUNTEERS = [
+    {"id": 1, "name": "Amrita NGO Foundation", "type": "NGO Partner", "contact": "amrita@ngo.org", "focus": "Women Training", "since": "2023-01-01", "status": "Active"},
+    {"id": 2, "name": "Dr. Navdeep Singh", "type": "Expert Volunteer", "contact": "9876501111", "focus": "Agro Techniques", "since": "2024-06-01", "status": "Active"},
+    {"id": 3, "name": "Punjabi University Students", "type": "Intern Group", "contact": "placement@punjabiuniv.edu", "focus": "Marketing & Digital", "since": "2025-01-15", "status": "Active"},
+]
+
+COMPLIANCE_REMINDERS = [
+    {"id": 1, "title": "FSSAI Renewal - Patiala Unit", "due_date": "2025-06-30", "type": "License", "priority": "High", "status": "Pending"},
+    {"id": 2, "title": "GST Monthly Filing - May 2025", "due_date": "2025-05-20", "type": "GST", "priority": "High", "status": "Pending"},
+    {"id": 3, "title": "Annual Trade License Renewal - Ludhiana", "due_date": "2025-12-31", "type": "Trade", "priority": "Medium", "status": "Pending"},
+    {"id": 4, "title": "Quality Testing - Quarterly Check", "due_date": "2025-06-30", "type": "Quality", "priority": "Medium", "status": "Scheduled"},
+]
+
+SAFETY_CHECKS = [
+    {"id": 1, "item": "Food Hygiene Standards", "unit": "Amritsar", "last_checked": "2025-04-01", "result": "Pass", "next_due": "2025-07-01"},
+    {"id": 2, "item": "Packaging Sanitation", "unit": "Ludhiana", "last_checked": "2025-03-15", "result": "Pass", "next_due": "2025-06-15"},
+    {"id": 3, "item": "Fire Safety Equipment", "unit": "Patiala", "last_checked": "2025-02-01", "result": "Fail", "next_due": "Immediate"},
+    {"id": 4, "item": "Worker Safety Gear", "unit": "Amritsar", "last_checked": "2025-04-10", "result": "Pass", "next_due": "2025-07-10"},
+]
+
+ORG_INFO = {
+    "name": "Mera Pind Balle Balle ERP",
+    "address": "Village Kokri, District Amritsar, Punjab 143001",
+    "gstin": "03AMPCB1234C1Z5",
+    "contact": "9876500000",
+    "email": "contact@mpbb-erp.org",
+}
