@@ -107,7 +107,7 @@
                         <i class="fas fa-gavel w-5"></i>
                         <span>Compliance & Legal</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                    <a href="/settings/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 {% if '/settings/' in request.path %}border-primary bg-white/10{% else %}border-transparent{% endif %}">
                         <i class="fas fa-cog w-5"></i>
                         <span>Settings</span>
                     </a>
@@ -131,20 +131,37 @@
                             <i class="fas fa-bell text-gray-600 text-lg"></i>
                             <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
                         </button>
-                        <div class="flex items-center gap-3">
-                            <div class="text-right hidden sm:block">
-                                <div class="text-sm font-medium text-gray-800">{{ request.session.name|default:"User" }}</div>
-                                <div class="text-xs text-gray-500 capitalize">{{ request.session.role|default:"Guest" }}</div>
+                        <div class="flex items-center gap-3" x-data="{open: false}">
+                            <button @click="open = !open" class="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                                    <span class="text-white text-sm font-bold">{{ request.session.name|default:"U"|slice:":1" }}</span>
+                                </div>
+                                <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                            </button>
+                            <div x-show="open" @click="open = false" class="fixed inset-0 z-40"></div>
+                            <div x-show="open" class="absolute right-0 top-12 w-48 bg-white rounded-lg shadow-lg z-50 py-2" style="display: none;">
+                                <div class="px-4 py-2 border-b border-gray-100">
+                                    <p class="font-medium text-gray-800">{{ request.session.name|default:"User" }}</p>
+                                    <p class="text-xs text-gray-500 capitalize">{{ request.session.role|default:"Guest" }}</p>
+                                </div>
+                                <a href="/settings/" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">
+                                    <i class="fas fa-cog w-5"></i> Settings
+                                </a>
+                                <a href="/logout/" class="block px-4 py-2 text-red-600 hover:bg-red-50">
+                                    <i class="fas fa-sign-out-alt w-5"></i> Logout
+                                </a>
                             </div>
-                            {% if request.session.username %}
-                            <a href="/logout/" class="p-2 rounded-lg bg-red-50 hover:bg-red-100 transition-colors text-red-600" title="Logout">
-                                <i class="fas fa-sign-out-alt"></i>
-                            </a>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
             </header>
+
+            <!-- Toast Notification -->
+            <div x-data="{show: false, message: ''}" x-show="show" x-init="@if request.session.show_toast %}show = true; setTimeout(() => show = false, 3000)@endif" 
+                 class="fixed top-20 right-4 z-50 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                <span x-text="message || 'Saved successfully!'"></span>
+            </div>
 
             <!-- Page Content -->
             <main class="flex-1 overflow-y-auto pt-16 lg:pt-0">

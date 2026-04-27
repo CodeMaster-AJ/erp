@@ -55,3 +55,20 @@ def dashboard_view(request):
         'expense_labels': expense_labels,
         'expense_values': expense_values,
     })
+
+def settings_view(request):
+    if not request.session.get('username'):
+        return redirect('/login/')
+    if request.session.get('role') != 'admin':
+        return redirect('/dashboard/')
+    
+    if request.method == 'POST':
+        app_data.ORG_INFO['name'] = request.POST.get('name')
+        app_data.ORG_INFO['address'] = request.POST.get('address')
+        app_data.ORG_INFO['gstin'] = request.POST.get('gstin')
+        app_data.ORG_INFO['contact'] = request.POST.get('contact')
+        app_data.ORG_INFO['email'] = request.POST.get('email')
+        request.session['show_toast'] = True
+        return render(request, 'core/settings.html', {'org_info': app_data.ORG_INFO, 'users': app_data.USERS, 'villages': app_data.VILLAGES, 'saved': True})
+    
+    return render(request, 'core/settings.html', {'org_info': app_data.ORG_INFO, 'users': app_data.USERS, 'villages': app_data.VILLAGES})
