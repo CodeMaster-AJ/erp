@@ -1,0 +1,55 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Revenue{% endblock %}
+{% block page_title %}Revenue Reports{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <p class="text-2xl font-poppins font-bold text-green-600">Total: ₹{{ total|floatformat:"0" }}</p>
+    </div>
+    <button onclick="window.print()" class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50">
+        <i class="fas fa-download mr-2"></i>Export CSV
+    </button>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary mb-6">
+    <h3 class="font-poppins font-semibold text-gray-800 mb-4">Monthly Trend</h3>
+    <div class="h-48">
+        <canvas id="revenueChart"></canvas>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">By Product</h3>
+        <table class="w-full text-sm">
+            <thead><tr class="border-b border-gray-100"><th class="text-left py-2 px-3">Product</th><th class="text-right py-2 px-3">Revenue</th></tr></thead>
+            <tbody>
+                {% for prod, amt in product_revenue.items %}
+                <tr class="border-b border-gray-50">
+                    <td class="py-2 px-3">{{ prod }}</td>
+                    <td class="py-2 px-3 text-right">₹{{ amt }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Village-wise Revenue</h3>
+        <p class="text-gray-500 text-sm">Coming soon...</p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const existing = Chart.getChart('revenueChart');
+    if (existing) existing.destroy();
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: { labels: {{ monthly_labels|safe }}, datasets: [{ label: 'Revenue', data: {{ monthly_revenue }}, backgroundColor: '#F5A623', borderRadius: 6 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+</script>
+{% endblock %}

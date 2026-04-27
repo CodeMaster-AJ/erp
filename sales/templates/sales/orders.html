@@ -1,0 +1,88 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Orders{% endblock %}
+{% block page_title %}Order Management{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+    <div class="flex gap-2">
+        <button class="px-3 py-1.5 bg-primary text-white rounded-lg text-sm">All</button>
+        <button class="px-3 py-1.5 border border-gray-200 rounded-lg text-sm hover:bg-gray-50">B2B</button>
+        <button class="px-3 py-1.5 border border-gray-200 rounded-lg text-sm hover:bg-gray-50">B2C</button>
+        <button class="px-3 py-1.5 border border-gray-200 rounded-lg text-sm hover:bg-gray-50">Marketplace</button>
+    </div>
+    <button @click="$dispatch('open-modal')" class="px-4 py-2 bg-primary hover:bg-orange-600 text-white rounded-lg text-sm">
+        <i class="fas fa-plus mr-2"></i>Add Order
+    </button>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-100">
+                    <th class="text-left py-2 px-3">Order ID</th>
+                    <th class="text-left py-2 px-3">Customer</th>
+                    <th class="text-left py-2 px-3">Type</th>
+                    <th class="text-left py-2 px-3">Product</th>
+                    <th class="text-center py-2 px-3">Qty</th>
+                    <th class="text-right py-2 px-3">Amount</th>
+                    <th class="text-center py-2 px-3">Status</th>
+                    <th class="text-left py-2 px-3">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in orders %}
+                <tr class="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" x-data="{open: false}" @click="open = !open">
+                    <td class="py-2 px-3 font-medium text-primary">{{ o.id }}</td>
+                    <td class="py-2 px-3">{{ o.customer }}</td>
+                    <td class="py-2 px-3">
+                        <span class="px-2 py-1 rounded-full text-xs {% if o.type == 'B2B' %}bg-blue-100 text-blue-700{% elif o.type == 'B2C' %}bg-green-100 text-green-700{% else %}bg-purple-100 text-purple-700{% endif %}">{{ o.type }}</span>
+                    </td>
+                    <td class="py-2 px-3">{{ o.product }}</td>
+                    <td class="py-2 px-3 text-center">{{ o.qty }}</td>
+                    <td class="py-2 px-3 text-right">₹{{ o.amount }}</td>
+                    <td class="py-2 px-3 text-center">
+                        {% if o.status == 'Delivered' %}<span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-700">Delivered</span>
+                        {% elif o.status == 'Pending' %}<span class="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-700">Pending</span>
+                        {% else %}<span class="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-700">{{ o.status }}</span>{% endif %}
+                    </td>
+                    <td class="py-2 px-3">{{ o.date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div x-data="{open: false}" @open-modal.window="open = true">
+    <div x-show="open" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div x-show="open" @click="open = false" class="fixed inset-0 bg-black/50"></div>
+            <div x-show="open" class="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md z-10">
+                <h3 class="text-xl font-poppins font-bold text-gray-800 mb-4">Add Order</h3>
+                <form method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    <div><label class="block text-sm text-gray-700 mb-1">Order ID</label><input type="text" name="order_id" required class="w-full px-4 py-2 border rounded-lg"></div>
+                    <div><label class="block text-sm text-gray-700 mb-1">Customer</label><input type="text" name="customer" required class="w-full px-4 py-2 border rounded-lg"></div>
+                    <div><label class="block text-sm text-gray-700 mb-1">Type</label><select name="type" class="w-full px-4 py-2 border rounded-lg"><option value="B2B">B2B</option><option value="B2C">B2C</option><option value="Marketplace">Marketplace</option></select></div>
+                    <div><label class="block text-sm text-gray-700 mb-1">Product</label><input type="text" name="product" required class="w-full px-4 py-2 border rounded-lg"></div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-sm text-gray-700 mb-1">Qty</label><input type="number" name="qty" required class="w-full px-4 py-2 border rounded-lg"></div>
+                        <div><label class="block text-sm text-gray-700 mb-1">Amount</label><input type="number" name="amount" required class="w-full px-4 py-2 border rounded-lg"></div>
+                    </div>
+                    <div><label class="block text-sm text-gray-700 mb-1">Status</label><select name="status" class="w-full px-4 py-2 border rounded-lg"><option value="Pending">Pending</option><option value="Processing">Processing</option><option value="Shipped">Shipped</option><option value="Delivered">Delivered</option></select></div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-sm text-gray-700 mb-1">Date</label><input type="date" name="date" required class="w-full px-4 py-2 border rounded-lg"></div>
+                        <div><label class="block text-sm text-gray-700 mb-1">Payment</label><select name="payment" class="w-full px-4 py-2 border rounded-lg"><option value="UPI">UPI</option><option value="COD">COD</option><option value="Net Banking">Net Banking</option></select></div>
+                    </div>
+                    <div class="flex gap-3 pt-2">
+                        <button type="button" @click="open = false" class="flex-1 py-2 border rounded-lg">Cancel</button>
+                        <button type="submit" class="flex-1 py-2 bg-primary text-white rounded-lg">Add Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

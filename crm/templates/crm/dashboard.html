@@ -1,0 +1,60 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}CRM Dashboard{% endblock %}
+{% block page_title %}CRM Dashboard{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <p class="text-gray-500 text-sm">Total Customers</p>
+        <p class="text-2xl font-poppins font-bold text-gray-800">{{ total_customers }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-yellow-500">
+        <p class="text-gray-500 text-sm">Premium Customers</p>
+        <p class="text-2xl font-poppins font-bold text-yellow-600">{{ premium }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-red-500">
+        <p class="text-gray-500 text-sm">Open Tickets</p>
+        <p class="text-2xl font-poppins font-bold text-red-600">{{ open_tickets }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-green-500">
+        <p class="text-gray-500 text-sm">Resolved This Month</p>
+        <p class="text-2xl font-poppins font-bold text-green-600">{{ resolved }}</p>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Customer Types</h3>
+        <div class="h-48">
+            <canvas id="typeChart"></canvas>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Recent Tickets</h3>
+        <div class="space-y-3">
+            {% for t in recent_tickets %}
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div>
+                    <p class="font-medium text-gray-800 text-sm">{{ t.id }}</p>
+                    <p class="text-xs text-gray-500">{{ t.customer }}</p>
+                </div>
+                <span class="px-2 py-1 rounded-full text-xs {% if t.priority == 'High' %}bg-red-100 text-red-700{% elif t.priority == 'Medium' %}bg-orange-100 text-orange-700{% else %}bg-blue-100 text-blue-700{% endif %}">{{ t.priority }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const existing = Chart.getChart('typeChart');
+    if (existing) existing.destroy();
+    const ctx = document.getElementById('typeChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: { labels: {{ type_labels|safe }}, datasets: [{ data: {{ type_values }}, backgroundColor: ['#F5A623', '#27AE60', '#8B0000'] }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+    });
+</script>
+{% endblock %}

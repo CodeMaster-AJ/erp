@@ -1,0 +1,101 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Sales Dashboard{% endblock %}
+{% block page_title %}Sales Dashboard{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <p class="text-gray-500 text-sm">Total Revenue</p>
+        <p class="text-2xl font-poppins font-bold text-gray-800">₹{{ total_revenue|floatformat:"0" }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-blue-500">
+        <p class="text-gray-500 text-sm">Orders This Month</p>
+        <p class="text-2xl font-poppins font-bold text-blue-600">{{ orders_this_month }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-green-500">
+        <p class="text-gray-500 text-sm">Top Product</p>
+        <p class="text-xl font-poppins font-bold text-green-600">{{ top_product }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <p class="text-gray-500 text-sm">Active Distributors</p>
+        <p class="text-2xl font-poppins font-bold text-gray-800">{{ active_distributors }}</p>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Revenue Trend</h3>
+        <div class="h-48">
+            <canvas id="revenueTrendChart"></canvas>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Sales by Region</h3>
+        <div class="h-48">
+            <canvas id="regionChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+    <h3 class="font-poppins font-semibold text-gray-800 mb-4">Recent Orders</h3>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-100">
+                    <th class="text-left py-2 px-3">Order ID</th>
+                    <th class="text-left py-2 px-3">Customer</th>
+                    <th class="text-left py-2 px-3">Product</th>
+                    <th class="text-center py-2 px-3">Qty</th>
+                    <th class="text-right py-2 px-3">Amount</th>
+                    <th class="text-center py-2 px-3">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in recent_orders %}
+                <tr class="border-b border-gray-50">
+                    <td class="py-2 px-3 font-medium text-primary">{{ o.id }}</td>
+                    <td class="py-2 px-3">{{ o.customer }}</td>
+                    <td class="py-2 px-3">{{ o.product }}</td>
+                    <td class="py-2 px-3 text-center">{{ o.qty }}</td>
+                    <td class="py-2 px-3 text-right">₹{{ o.amount }}</td>
+                    <td class="py-2 px-3 text-center">
+                        {% if o.status == 'Delivered' %}<span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-700">Delivered</span>
+                        {% elif o.status == 'Pending' %}<span class="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-700">Pending</span>
+                        {% else %}<span class="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-700">{{ o.status }}</span>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const existingRevenue = Chart.getChart('revenueTrendChart');
+    if (existingRevenue) existingRevenue.destroy();
+    const revenueCtx = document.getElementById('revenueTrendChart').getContext('2d');
+    new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+            labels: {{ revenue_labels|safe }},
+            datasets: [{ label: 'Revenue', data: {{ revenue_values }}, borderColor: '#F5A623', backgroundColor: '#F5A62320', fill: true, tension: 0.4 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+
+    const existingRegion = Chart.getChart('regionChart');
+    if (existingRegion) existingRegion.destroy();
+    const regionCtx = document.getElementById('regionChart').getContext('2d');
+    new Chart(regionCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ region_labels|safe }},
+            datasets: [{ label: 'Sales', data: {{ region_values }}, backgroundColor: '#F5A623', borderRadius: 6 }]
+        },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+</script>
+{% endblock %}

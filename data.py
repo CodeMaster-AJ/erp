@@ -128,6 +128,44 @@ NEW_BATCHES = []
 
 NEW_QUALITY_CHECKS = []
 
+DISTRIBUTORS = [
+    {"id": 1, "name": "Singh Distributors", "region": "Amritsar", "contact": "9876543210", "products": ["Achar", "Flour"], "monthly_sales": 85000, "status": "Active"},
+    {"id": 2, "name": "Kaur Traders Co", "region": "Ludhiana", "contact": "9812345678", "products": ["Dupatta", "Basket"], "monthly_sales": 42000, "status": "Active"},
+    {"id": 3, "name": "Rural Fresh Pvt Ltd", "region": "Delhi NCR", "contact": "9988776655", "products": ["Saag Mix", "Flour"], "monthly_sales": 118000, "status": "Active"},
+    {"id": 4, "name": "NRI Gifts Hub", "region": "Online", "contact": "info@nrigifts.com", "products": ["Dupatta", "Achar"], "monthly_sales": 0, "status": "New"},
+]
+
+CAMPAIGNS = [
+    {"id": 1, "name": "Baisakhi Special Offer", "type": "Seasonal", "discount": "15%", "products": ["Achar", "Saag Mix"], "channel": "WhatsApp", "start": "2025-04-10", "end": "2025-04-15", "status": "Completed", "reach": 240},
+    {"id": 2, "name": "Summer Cooling Products", "type": "Product Push", "discount": "10%", "products": ["Wheat Flour"], "channel": "SMS", "start": "2025-05-01", "end": "2025-05-31", "status": "Upcoming", "reach": 0},
+    {"id": 3, "name": "Mother's Day Handicraft", "type": "Seasonal", "discount": "5%", "products": ["Dupatta", "Basket"], "channel": "WhatsApp + SMS", "start": "2025-05-11", "end": "2025-05-13", "status": "Upcoming", "reach": 0},
+]
+
+SCHEMES = [
+    {"id": 1, "name": "PMEGP Loan", "type": "Loan", "amount": 500000, "received_date": "2023-06-01", "repayment_due": "2026-06-01", "status": "Active", "notes": "Machinery purchase - Amritsar unit"},
+    {"id": 2, "name": "State Women SHG Grant", "type": "Grant", "amount": 150000, "received_date": "2024-01-15", "repayment_due": "N/A", "status": "Received", "notes": "No repayment needed"},
+    {"id": 3, "name": "MUDRA Loan - Tarun", "type": "Loan", "amount": 200000, "received_date": "2024-03-10", "repayment_due": "2027-03-10", "status": "Active", "notes": "Working capital"},
+]
+
+GST_RECORDS = [
+    {"id": 1, "invoice_no": "INV-2025-001", "customer": "Punjab Grocers Pvt Ltd", "amount": 6000, "gst_rate": "5%", "gst_amount": 300, "total": 6300, "date": "2025-04-10", "filed": True},
+    {"id": 2, "invoice_no": "INV-2025-002", "customer": "Meesho Platform", "amount": 8400, "gst_rate": "5%", "gst_amount": 420, "total": 8820, "date": "2025-04-18", "filed": False},
+    {"id": 3, "invoice_no": "INV-2025-003", "customer": "Amazon.in", "amount": 8500, "gst_rate": "5%", "gst_amount": 425, "total": 8925, "date": "2025-04-20", "filed": False},
+]
+
+CUSTOMERS = [
+    {"id": 1, "name": "Punjab Grocers Pvt Ltd", "type": "B2B", "contact": "9876500001", "city": "Amritsar", "total_orders": 8, "total_spent": 52000, "last_order": "2025-04-10", "status": "Regular"},
+    {"id": 2, "name": "Ramesh Kumar", "type": "B2C", "contact": "9876500002", "city": "Delhi", "total_orders": 3, "total_spent": 5600, "last_order": "2025-04-15", "status": "Regular"},
+    {"id": 3, "name": "Amazon.in", "type": "Marketplace", "contact": "seller@amazon.in", "city": "Online", "total_orders": 12, "total_spent": 98000, "last_order": "2025-04-20", "status": "Premium"},
+    {"id": 4, "name": "Meesho Platform", "type": "Marketplace", "contact": "seller@meesho.com", "city": "Online", "total_orders": 6, "total_spent": 42000, "last_order": "2025-04-18", "status": "Regular"},
+]
+
+TICKETS = [
+    {"id": "TKT001", "customer": "Ramesh Kumar", "issue": "Product damaged in delivery", "priority": "High", "status": "Open", "created": "2025-04-16", "assigned_to": "Gurpreet Kaur"},
+    {"id": "TKT002", "customer": "Punjab Grocers Pvt Ltd", "issue": "Wrong quantity delivered", "priority": "Medium", "status": "Resolved", "created": "2025-04-12", "assigned_to": "Simran Sharma"},
+    {"id": "TKT003", "customer": "Amazon.in", "issue": "Label missing on 5 jars", "priority": "Low", "status": "In Progress", "created": "2025-04-21", "assigned_to": "Rajwinder Singh"},
+]
+
 NEW_TRAINEES = []
 
 NEW_PROGRAMS = []

@@ -18,6 +18,9 @@ INSTALLED_APPS = [
     'core',
     'production',
     'training',
+    'sales',
+    'finance',
+    'crm',
 ]
 
 MIDDLEWARE = [
