@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mera Pind Balle Balle ERP{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#F5A623',
+                        secondary: '#27AE60',
+                        accent: '#8B0000',
+                        cream: '#FFFBF0',
+                        darkBg: '#1A1A2E',
+                        darkGreen: '#0D2B1D',
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="bg-cream" x-data="{ sidebarOpen: false }">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
+               class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-darkGreen transform transition-transform duration-300 ease-in-out flex flex-col shadow-2xl">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 px-6 py-6 border-b border-white/10">
+                <img src="{% static 'img/MPBB_LOGO.svg' %}" alt="MPBB Logo" class="w-14 h-14 rounded-full">
+                <div>
+                    <div class="text-primary font-poppins font-bold text-lg">Mera Pind</div>
+                    <div class="text-white/70 text-xs">Balle Balle</div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 overflow-y-auto py-4">
+                <!-- MAIN -->
+                <div class="px-4 mb-4">
+                    <div class="text-white/40 text-xs uppercase font-semibold px-3 mb-2">Main</div>
+                    <a href="/dashboard/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                        <i class="fas fa-chart-line w-5"></i>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+                </div>
+
+                <!-- OPERATIONS -->
+                <div class="px-4 mb-4">
+                    <div class="text-white/40 text-xs uppercase font-semibold px-3 mb-2">Operations</div>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                        <i class="fas fa-boxes-stacked w-5"></i>
+                        <span>Production & Inventory</span>
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                        <i class="fas fa-graduation-cap w-5"></i>
+                        <span>Training & Skills</span>
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                        <i class="fas fa-shopping-cart w-5"></i>
+                        <span>Sales & Marketing</span>
+                    </a>
+                </div>
+
+                <!-- ACCOUNTS -->
+                <div class="px-4 mb-4">
+                    <div class="text-white/40 text-xs uppercase font-semibold px-3 mb-2">Accounts</div>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                        <i class="fas fa-coins w-5"></i>
+                        <span>Finance</span>
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                        <i class="fas fa-users w-5"></i>
+                        <span>CRM</span>
+                    </a>
+                </div>
+
+                <!-- PEOPLE -->
+                <div class="px-4 mb-4">
+                    <div class="text-white/40 text-xs uppercase font-semibold px-3 mb-2">People</div>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                        <i class="fas fa-users-gear w-5"></i>
+                        <span>HR & Workforce</span>
+                    </a>
+                </div>
+
+                <!-- SYSTEM -->
+                <div class="px-4 mb-4">
+                    <div class="text-white/40 text-xs uppercase font-semibold px-3 mb-2">System</div>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                        <i class="fas fa-gavel w-5"></i>
+                        <span>Compliance & Legal</span>
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                        <i class="fas fa-cog w-5"></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navbar -->
+            <header class="bg-white shadow-sm fixed lg:static top-0 left-0 right-0 z-40 h-16">
+                <div class="flex items-center justify-between h-full px-4 lg:px-6">
+                    <div class="flex items-center gap-4">
+                        <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-bars text-xl text-gray-700"></i>
+                        </button>
+                        <h1 class="text-xl font-poppins font-semibold text-gray-800">{% block page_title %}Dashboard{% endblock %}</h1>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button class="relative p-2 rounded-full hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-bell text-gray-600 text-lg"></i>
+                            <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+                        </button>
+                        <div class="flex items-center gap-3">
+                            <div class="text-right hidden sm:block">
+                                <div class="text-sm font-medium text-gray-800">{{ request.session.name|default:"User" }}</div>
+                                <div class="text-xs text-gray-500 capitalize">{{ request.session.role|default:"Guest" }}</div>
+                            </div>
+                            {% if request.session.username %}
+                            <a href="/logout/" class="p-2 rounded-lg bg-red-50 hover:bg-red-100 transition-colors text-red-600" title="Logout">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="flex-1 overflow-y-auto pt-16 lg:pt-0">
+                <div class="p-4 lg:p-6">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

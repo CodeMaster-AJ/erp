@@ -1,0 +1,307 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Dashboard - Mera Pind Balle Balle ERP{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- ROW 1: 4 Stat Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Total Active Villages</p>
+                <p class="text-2xl font-poppins font-bold text-gray-800 mt-1">{{ stats.total_villages }}</p>
+                <p class="text-xs text-green-600 mt-1"><i class="fas fa-check-circle mr-1"></i>All operational</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <i class="fas fa-village text-primary text-xl"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Total Workers</p>
+                <p class="text-2xl font-poppins font-bold text-gray-800 mt-1">{{ stats.active_workers }}</p>
+                <p class="text-xs text-green-600 mt-1"><i class="fas fa-arrow-up mr-1"></i>12 new this month</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <i class="fas fa-users text-primary text-xl"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Revenue This Month</p>
+                <p class="text-2xl font-poppins font-bold text-gray-800 mt-1">₹{{ stats.monthly_revenue|floatformat:"0"|add:"," }}</p>
+                <p class="text-xs text-green-600 mt-1"><i class="fas fa-arrow-up mr-1"></i>12% from last month</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <i class="fas fa-indian-rupee-sign text-primary text-xl"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Expenses This Month</p>
+                <p class="text-2xl font-poppins font-bold text-gray-800 mt-1">₹{{ stats.monthly_expenses|floatformat:"0"|add:"," }}</p>
+                <p class="text-xs text-red-600 mt-1"><i class="fas fa-arrow-up mr-1"></i>8% from last month</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <i class="fas fa-wallet text-primary text-xl"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ROW 2: 2 Charts -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-6 lg:mb-8">
+        <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+            <h3 class="font-poppins font-semibold text-gray-800 mb-4">Monthly Revenue</h3>
+            <div class="h-64">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+            <h3 class="font-poppins font-semibold text-gray-800 mb-4">Expense Breakdown</h3>
+            <div class="h-64">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+<!-- ROW 3: Alerts + Village Performance -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6 lg:mb-8">
+    <!-- Alerts -->
+    <div class="lg:col-span-1 bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Alerts</h3>
+        <div class="space-y-3">
+            {% if stats.low_stock_alerts > 0 %}
+            <div class="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
+                <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-red-600"></i>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-800 text-sm">Low Stock Alert</p>
+                    <p class="text-xs text-gray-500">{{ stats.low_stock_alerts }} product running low</p>
+                </div>
+            </div>
+            {% endif %}
+            {% if stats.compliance_alerts > 0 %}
+            <div class="flex items-center gap-3 p-3 bg-orange-50 rounded-lg">
+                <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
+                    <i class="fas fa-gavel text-orange-600"></i>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-800 text-sm">Compliance Alert</p>
+                    <p class="text-xs text-gray-500">{{ stats.compliance_alerts }} document expiring</p>
+                </div>
+            </div>
+            {% endif %}
+            {% if stats.pending_orders > 0 %}
+            <div class="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
+                <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center">
+                    <i class="fas fa-clock text-yellow-600"></i>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-800 text-sm">Pending Orders</p>
+                    <p class="text-xs text-gray-500">{{ stats.pending_orders }} orders awaiting</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Village Performance -->
+    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary overflow-hidden">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Village Performance</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-gray-100">
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">Name</th>
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">District</th>
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">Head</th>
+                        <th class="text-center py-2 px-3 text-gray-500 font-medium">Workers</th>
+                        <th class="text-center py-2 px-3 text-gray-500 font-medium">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for village in villages %}
+                    <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                        <td class="py-2 px-3 font-medium text-gray-800">{{ village.name }}</td>
+                        <td class="py-2 px-3 text-gray-600">{{ village.district }}</td>
+                        <td class="py-2 px-3 text-gray-600">{{ village.head }}</td>
+                        <td class="py-2 px-3 text-center text-gray-600">{{ village.workers }}</td>
+                        <td class="py-2 px-3 text-center">
+                            {% if village.status == 'Active' %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-700">Active</span>
+                            {% elif village.status == 'Setting Up' %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-700">Setting Up</span>
+                            {% else %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">{{ village.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ROW 4: Recent Orders + Training Programs -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+    <!-- Recent Orders -->
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary overflow-hidden">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Recent Orders</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-gray-100">
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">Order ID</th>
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">Customer</th>
+                        <th class="text-center py-2 px-3 text-gray-500 font-medium">Qty</th>
+                        <th class="text-right py-2 px-3 text-gray-500 font-medium">Amount</th>
+                        <th class="text-center py-2 px-3 text-gray-500 font-medium">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                        <td class="py-2 px-3 font-medium text-primary">{{ order.id }}</td>
+                        <td class="py-2 px-3 text-gray-800 truncate max-w-[120px]">{{ order.customer }}</td>
+                        <td class="py-2 px-3 text-center text-gray-600">{{ order.qty }}</td>
+                        <td class="py-2 px-3 text-right text-gray-800">₹{{ order.amount|floatformat:"0" }}</td>
+                        <td class="py-2 px-3 text-center">
+                            {% if order.status == 'Delivered' %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-700">Delivered</span>
+                            {% elif order.status == 'Shipped' %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-700">Shipped</span>
+                            {% elif order.status == 'Processing' %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-700">Processing</span>
+                            {% elif order.status == 'Pending' %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-700">Pending</span>
+                            {% else %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">{{ order.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Training Programs -->
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary overflow-hidden">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Active Training Programs</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-gray-100">
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">Title</th>
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">Category</th>
+                        <th class="text-center py-2 px-3 text-gray-500 font-medium">Enrolled</th>
+                        <th class="text-center py-2 px-3 text-gray-500 font-medium">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for program in training_programs %}
+                    <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                        <td class="py-2 px-3 font-medium text-gray-800">{{ program.title }}</td>
+                        <td class="py-2 px-3 text-gray-600">{{ program.category }}</td>
+                        <td class="py-2 px-3 text-center text-gray-600">{{ program.enrolled }}</td>
+                        <td class="py-2 px-3 text-center">
+                            {% if program.status == 'Active' %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-700">Active</span>
+                            {% elif program.status == 'Completed' %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-700">Completed</span>
+                            {% elif program.status == 'Upcoming' %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-700">Upcoming</span>
+                            {% else %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">{{ program.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Destroy existing charts if they exist to prevent duplication
+    const existingRevenueChart = Chart.getChart('revenueChart');
+    const existingExpenseChart = Chart.getChart('expenseChart');
+    if (existingRevenueChart) existingRevenueChart.destroy();
+    if (existingExpenseChart) existingExpenseChart.destroy();
+
+    // Revenue Bar Chart
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(revenueCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ revenue_labels|safe }},
+            datasets: [{
+                label: 'Revenue (₹)',
+                data: {{ revenue_values }},
+                backgroundColor: '#F5A623',
+                borderColor: '#e0941d',
+                borderWidth: 1,
+                borderRadius: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '₹' + value / 1000 + 'k';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Expense Doughnut Chart
+    const expenseCtx = document.getElementById('expenseChart').getContext('2d');
+    new Chart(expenseCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ expense_labels|safe }},
+            datasets: [{
+                data: {{ expense_values }},
+                backgroundColor: [
+                    '#F5A623',
+                    '#27AE60',
+                    '#8B0000',
+                    '#3498DB',
+                    '#9B59B6'
+                ],
+                borderWidth: 0,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
