@@ -1,0 +1,78 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Certifications - Mera Pind Balle Balle ERP{% endblock %}
+{% block page_title %}Certifications{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+    <h3 class="font-poppins font-semibold text-gray-800 mb-4">Issued Certificates</h3>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-100">
+                    <th class="text-left py-2 px-3 text-gray-500 font-medium">Certificate ID</th>
+                    <th class="text-left py-2 px-3 text-gray-500 font-medium">Trainee Name</th>
+                    <th class="text-left py-2 px-3 text-gray-500 font-medium">Program</th>
+                    <th class="text-left py-2 px-3 text-gray-500 font-medium">Village</th>
+                    <th class="text-left py-2 px-3 text-gray-500 font-medium">Issued Date</th>
+                    <th class="text-center py-2 px-3 text-gray-500 font-medium">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cert in certifications %}
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="py-2 px-3 font-medium text-primary">{{ cert.cert_id }}</td>
+                    <td class="py-2 px-3 font-medium text-gray-800">{{ cert.trainee }}</td>
+                    <td class="py-2 px-3 text-gray-600">{{ cert.program }}</td>
+                    <td class="py-2 px-3 text-gray-600">{{ cert.village }}</td>
+                    <td class="py-2 px-3 text-gray-600">{{ cert.issued_date }}</td>
+                    <td class="py-2 px-3 text-center">
+                        <button @click="$dispatch('view-cert', {{ forloop.counter0 }})" class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs hover:bg-green-200">
+                            <i class="fas fa-eye mr-1"></i>View
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Certificate Modal -->
+<div x-data="{ open: false, certIndex: 0 }" @view-cert.window="open = true; certIndex = $event.detail" x-show="open">
+    <div x-show="open" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div x-show="open" @click="open = false" class="fixed inset-0 bg-black/50"></div>
+            <div x-show="open" class="relative bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg z-10">
+                <!-- Certificate Design -->
+                <div class="border-4 border-primary rounded-xl p-8 bg-cream">
+                    <div class="text-center mb-6">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCI+PGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iMzUiIGZpbGw9IiNGNUE2MjMiIHN0cm9rZT0iIzFERkIxRCIgc3Ryb2tlLXdpZHRoPSIzIi8+PHRleHQgeD0iNDAiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2siIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiMxQTFBMkUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJib2xkIj5NUEJCPC90ZXh0Pjwvc3ZnPg==" alt="MPBB Logo" class="w-20 h-20 mx-auto mb-4">
+                        <h2 class="text-2xl font-poppins font-bold text-primary">Mera Pind Balle Balle</h2>
+                        <p class="text-gray-500 text-sm">Women Empowerment Program</p>
+                    </div>
+                    <div class="text-center py-6 border-t border-b border-gray-200 my-6">
+                        <p class="text-gray-500 text-sm uppercase tracking-wider">Certificate of Completion</p>
+                        <p class="text-lg text-gray-600 mt-2">This is to certify that</p>
+                        <p class="text-2xl font-poppins font-bold text-gray-800 mt-2" x-text="['{{ certifications.0.trainee }}', '{{ certifications.1.trainee }}'][certIndex - 1] || '{{ certifications.0.trainee }}'"></p>
+                        <p class="text-lg text-gray-600 mt-2">has successfully completed</p>
+                        <p class="text-xl font-semibold text-primary mt-2" x-text="['{{ certifications.0.program }}', '{{ certifications.1.program }}'][certIndex - 1] || '{{ certifications.0.program }}'"></p>
+                        <p class="text-gray-500 mt-2">Training Program</p>
+                    </div>
+                    <div class="flex justify-between items-center text-center">
+                        <div>
+                            <p class="text-xs text-gray-500">Certificate ID</p>
+                            <p class="text-sm font-medium text-gray-800" x-text="['{{ certifications.0.cert_id }}', '{{ certifications.1.cert_id }}'][certIndex - 1] || '{{ certifications.0.cert_id }}'"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Issued Date</p>
+                            <p class="text-sm font-medium text-gray-800" x-text="['{{ certifications.0.issued_date }}', '{{ certifications.1.issued_date }}'][certIndex - 1] || '{{ certifications.0.issued_date }}'"></p>
+                        </div>
+                    </div>
+                </div>
+                <button @click="open = false" class="w-full py-3 mt-4 bg-primary hover:bg-orange-600 text-white rounded-lg">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

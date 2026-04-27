@@ -1,0 +1,84 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Inventory - Mera Pind Balle Balle ERP{% endblock %}
+{% block page_title %}Inventory{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Products Table -->
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Product Stock Levels</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-gray-100">
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">Product</th>
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">Category</th>
+                        <th class="text-center py-2 px-3 text-gray-500 font-medium">Price</th>
+                        <th class="text-center py-2 px-3 text-gray-500 font-medium">Stock</th>
+                        <th class="text-center py-2 px-3 text-gray-500 font-medium">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in products %}
+                    <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                        <td class="py-2 px-3 font-medium text-gray-800">{{ p.name }}</td>
+                        <td class="py-2 px-3 text-gray-600">{{ p.category }}</td>
+                        <td class="py-2 px-3 text-center text-gray-800">₹{{ p.price }}</td>
+                        <td class="py-2 px-3 text-center text-gray-800">{{ p.stock }}</td>
+                        <td class="py-2 px-3 text-center">
+                            {% if p.stock >= 100 %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-700">Healthy</span>
+                            {% elif p.stock >= 50 %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-700">Medium</span>
+                            {% else %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-red-100 text-red-700">Low</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Stock Chart -->
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Stock Distribution</h3>
+        <div class="h-64">
+            <canvas id="stockChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const existingStockChart = Chart.getChart('stockChart');
+    if (existingStockChart) existingStockChart.destroy();
+
+    const ctx = document.getElementById('stockChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ product_names|safe }},
+            datasets: [{
+                label: 'Stock Units',
+                data: {{ stock_values }},
+                backgroundColor: [
+                    {% for p in products %}
+                    {% if p.stock >= 100 %}'#27AE60'{% elif p.stock >= 50 %}'#F5A623'{% else %}'#8B0000'{% endif %}{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                borderRadius: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true } }
+        }
+    });
+</script>
+{% endblock %}

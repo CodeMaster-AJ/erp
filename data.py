@@ -75,3 +75,61 @@ DASHBOARD_STATS = {
     "low_stock_alerts": 1,
     "compliance_alerts": 1,
 }
+
+VENDORS = [
+    {"id": 1, "name": "Sharma Traders", "item": "Mango (Raw)", "rate": 45, "unit": "kg", "village": "Amritsar", "rating": 4.5, "status": "Active"},
+    {"id": 2, "name": "Punjab Agro Supplies", "item": "Wheat", "rate": 28, "unit": "kg", "village": "Ludhiana", "rating": 4.2, "status": "Active"},
+    {"id": 3, "name": "Bamboo Crafts Depot", "item": "Bamboo Strips", "rate": 120, "unit": "bundle", "village": "Patiala", "rating": 3.8, "status": "Active"},
+    {"id": 4, "name": "Spice House", "item": "Mixed Spices", "rate": 350, "unit": "kg", "village": "Amritsar", "rating": 4.7, "status": "Active"},
+]
+
+RAW_MATERIALS = [
+    {"id": 1, "name": "Raw Mango", "vendor": "Sharma Traders", "stock_kg": 500, "min_stock": 100, "unit": "kg", "last_ordered": "2025-04-10"},
+    {"id": 2, "name": "Wheat Grain", "vendor": "Punjab Agro Supplies", "stock_kg": 1200, "min_stock": 300, "unit": "kg", "last_ordered": "2025-04-05"},
+    {"id": 3, "name": "Mixed Spices", "vendor": "Spice House", "stock_kg": 45, "min_stock": 50, "unit": "kg", "last_ordered": "2025-04-01"},
+    {"id": 4, "name": "Glass Jars (500g)", "vendor": "Packing Co", "stock_kg": 800, "min_stock": 200, "unit": "pieces", "last_ordered": "2025-04-12"},
+    {"id": 5, "name": "Bamboo Strips", "vendor": "Bamboo Crafts Depot", "stock_kg": 30, "min_stock": 50, "unit": "bundles", "last_ordered": "2025-03-28"},
+]
+
+PRODUCTION_BATCHES = [
+    {"id": "BATCH001", "product": "Achar - Mango", "category": "FMCG", "village": "Amritsar", "quantity": 200, "unit": "Jars", "start_date": "2025-04-15", "end_date": "2025-04-18", "status": "Completed", "assigned_to": "Harmeet Kaur"},
+    {"id": "BATCH002", "product": "Organic Wheat Flour", "category": "Agro", "village": "Ludhiana", "quantity": 150, "unit": "Bags", "start_date": "2025-04-20", "end_date": "2025-04-22", "status": "In Progress", "assigned_to": "Manpreet Kaur"},
+    {"id": "BATCH003", "product": "Phulkari Dupatta", "category": "Handicraft", "village": "Patiala", "quantity": 20, "unit": "Pieces", "start_date": "2025-04-25", "end_date": "2025-05-05", "status": "Scheduled", "assigned_to": "Sukhjit Kaur"},
+    {"id": "BATCH004", "product": "Sarson Ka Saag Mix", "category": "FMCG", "village": "Amritsar", "quantity": 300, "unit": "Packs", "start_date": "2025-04-28", "end_date": "2025-04-30", "status": "Scheduled", "assigned_to": "Gurpreet Kaur"},
+]
+
+QUALITY_CHECKS = [
+    {"id": 1, "batch": "BATCH001", "product": "Achar - Mango", "checked_by": "Rajwinder Singh", "date": "2025-04-18", "hygiene": "Pass", "packaging": "Pass", "expiry_marked": "Pass", "result": "Approved", "notes": "All clear"},
+    {"id": 2, "batch": "BATCH002", "product": "Organic Wheat Flour", "checked_by": "Rajwinder Singh", "date": "2025-04-22", "hygiene": "Pass", "packaging": "Fail", "expiry_marked": "Pass", "result": "Rejected", "notes": "Bag seal issue — 10 bags returned"},
+]
+
+TRAINEES = [
+    {"id": 1, "name": "Balwinder Kaur", "village": "Amritsar", "program": "Pickle & Papad Making", "enrolled_date": "2025-04-01", "progress": 75, "status": "In Progress"},
+    {"id": 2, "name": "Sukhpreet Kaur", "village": "Amritsar", "program": "Pickle & Papad Making", "enrolled_date": "2025-04-01", "progress": 60, "status": "In Progress"},
+    {"id": 3, "name": "Navneet Kaur", "village": "Ludhiana", "program": "Phulkari Embroidery", "enrolled_date": "2025-04-05", "progress": 40, "status": "In Progress"},
+    {"id": 4, "name": "Prabhjot Kaur", "village": "Patiala", "program": "Organic Farming Basics", "enrolled_date": "2025-03-01", "progress": 100, "status": "Completed"},
+    {"id": 5, "name": "Daljit Kaur", "village": "Amritsar", "program": "Organic Farming Basics", "enrolled_date": "2025-03-01", "progress": 100, "status": "Completed"},
+]
+
+CERTIFICATIONS = [
+    {"id": 1, "trainee": "Prabhjot Kaur", "program": "Organic Farming Basics", "issued_date": "2025-03-30", "cert_id": "MPBB-CERT-001", "village": "Patiala"},
+    {"id": 2, "trainee": "Daljit Kaur", "program": "Organic Farming Basics", "issued_date": "2025-03-30", "cert_id": "MPBB-CERT-002", "village": "Amritsar"},
+]
+
+TRAINING_SESSIONS = [
+    {"id": 1, "program": "Pickle & Papad Making", "date": "2025-04-28", "time": "10:00 AM", "trainer": "Simran Sharma", "location": "Amritsar Unit", "attendees": 12},
+    {"id": 2, "program": "Phulkari Embroidery", "date": "2025-04-29", "time": "2:00 PM", "trainer": "Gurdeep Kaur", "location": "Patiala Unit", "attendees": 8},
+    {"id": 3, "program": "Hygiene & Food Safety", "date": "2025-05-01", "time": "9:00 AM", "trainer": "Simran Sharma", "location": "Amritsar Unit", "attendees": 30},
+]
+
+PURCHASE_ORDERS = []
+
+NEW_BATCHES = []
+
+NEW_QUALITY_CHECKS = []
+
+NEW_TRAINEES = []
+
+NEW_PROGRAMS = []
+
+NEW_SESSIONS = []

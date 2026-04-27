@@ -1,0 +1,106 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Trainees - Mera Pind Balle Balle ERP{% endblock %}
+{% block page_title %}Trainee Management{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+        <h3 class="font-poppins font-semibold text-gray-800">Trainees List</h3>
+        <div class="flex flex-wrap gap-3">
+            <select x-data="{}" @change="window.location.href = '/training/trainees/?village=' + $el.value" class="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                <option value="">All Villages</option>
+                {% for v in villages %}
+                <option value="{{ v }}">{{ v }}</option>
+                {% endfor %}
+            </select>
+            <button @click="$dispatch('open-modal')" class="px-4 py-2 bg-primary hover:bg-orange-600 text-white rounded-lg text-sm font-medium transition-colors">
+                <i class="fas fa-plus mr-2"></i>Enroll Trainee
+            </button>
+        </div>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-100">
+                    <th class="text-left py-2 px-3 text-gray-500 font-medium">Name</th>
+                    <th class="text-left py-2 px-3 text-gray-500 font-medium">Village</th>
+                    <th class="text-left py-2 px-3 text-gray-500 font-medium">Program</th>
+                    <th class="text-left py-2 px-3 text-gray-500 font-medium">Enrolled Date</th>
+                    <th class="text-left py-2 px-3 text-gray-500 font-medium">Progress</th>
+                    <th class="text-center py-2 px-3 text-gray-500 font-medium">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in trainees %}
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="py-2 px-3 font-medium text-gray-800">{{ t.name }}</td>
+                    <td class="py-2 px-3 text-gray-600">{{ t.village }}</td>
+                    <td class="py-2 px-3 text-gray-600">{{ t.program }}</td>
+                    <td class="py-2 px-3 text-gray-600">{{ t.enrolled_date }}</td>
+                    <td class="py-2 px-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-20 bg-gray-200 rounded-full h-2">
+                                <div class="bg-primary h-2 rounded-full transition-all" style="width: {{ t.progress }}%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500">{{ t.progress }}%</span>
+                        </div>
+                    </td>
+                    <td class="py-2 px-3 text-center">
+                        {% if t.status == 'Completed' %}
+                        <span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-700">Completed</span>
+                        {% else %}
+                        <span class="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-700">In Progress</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Enroll Trainee Modal -->
+<div x-data="{ open: false }" @open-modal.window="open = true">
+    <div x-show="open" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div x-show="open" @click="open = false" class="fixed inset-0 bg-black/50"></div>
+            <div x-show="open" class="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md z-10">
+                <h3 class="text-xl font-poppins font-bold text-gray-800 mb-4">Enroll Trainee</h3>
+                <form method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Village</label>
+                        <select name="village" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                            <option value="Amritsar">Amritsar</option>
+                            <option value="Ludhiana">Ludhiana</option>
+                            <option value="Patiala">Patiala</option>
+                            <option value="Bathinda">Bathinda</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Program</label>
+                        <select name="program" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                            {% for prog in programs %}
+                            <option value="{{ prog.title }}">{{ prog.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Enrolled Date</label>
+                        <input type="date" name="enrolled_date" required class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div class="flex gap-3 pt-2">
+                        <button type="button" @click="open = false" class="flex-1 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50">Cancel</button>
+                        <button type="submit" class="flex-1 py-2 bg-primary hover:bg-orange-600 text-white rounded-lg">Enroll</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

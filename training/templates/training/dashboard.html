@@ -1,0 +1,107 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Training Dashboard - Mera Pind Balle Balle ERP{% endblock %}
+{% block page_title %}Training Dashboard{% endblock %}
+
+{% block content %}
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Total Programs</p>
+                <p class="text-2xl font-poppins font-bold text-gray-800 mt-1">{{ total_programs }}</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <i class="fas fa-graduation-cap text-primary text-xl"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-green-500 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Active Programs</p>
+                <p class="text-2xl font-poppins font-bold text-green-600 mt-1">{{ active_programs }}</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                <i class="fas fa-play text-green-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-blue-500 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Total Trainees</p>
+                <p class="text-2xl font-poppins font-bold text-blue-600 mt-1">{{ total_trainees }}</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                <i class="fas fa-users text-blue-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Certificates Issued</p>
+                <p class="text-2xl font-poppins font-bold text-gray-800 mt-1">{{ certificates_issued }}</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <i class="fas fa-award text-primary text-xl"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Progress Bars + Chart -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Active Programs Progress -->
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Active Programs</h3>
+        <div class="space-y-4">
+            {% for prog in active_prog_list %}
+            <div>
+                <div class="flex justify-between text-sm mb-1">
+                    <span class="text-gray-700 font-medium">{{ prog.title }}</span>
+                    <span class="text-gray-500">{{ prog.enrolled }} enrolled</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-primary h-2 rounded-full" style="width: {% if prog.status == 'Active' %}75%{% elif prog.status == 'Completed' %}100%{% else %}0%{% endif %}"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Trainees by Category -->
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Trainees by Category</h3>
+        <div class="h-48">
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const existingCatChart = Chart.getChart('categoryChart');
+    if (existingCatChart) existingCatChart.destroy();
+
+    const ctx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ category_labels|safe }},
+            datasets: [{
+                data: {{ category_values }},
+                backgroundColor: ['#F5A623', '#27AE60', '#8B0000', '#3498DB'],
+                borderWidth: 0,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'right' } }
+        }
+    });
+</script>
+{% endblock %}

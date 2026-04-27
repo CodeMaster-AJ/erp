@@ -55,7 +55,7 @@
                 <!-- MAIN -->
                 <div class="px-4 mb-4">
                     <div class="text-white/40 text-xs uppercase font-semibold px-3 mb-2">Main</div>
-                    <a href="/dashboard/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                    <a href="/dashboard/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 {% if request.path == '/dashboard/' %}border-primary bg-white/10{% else %}border-transparent{% endif %}">
                         <i class="fas fa-chart-line w-5"></i>
                         <span class="font-medium">Dashboard</span>
                     </a>
@@ -64,11 +64,11 @@
                 <!-- OPERATIONS -->
                 <div class="px-4 mb-4">
                     <div class="text-white/40 text-xs uppercase font-semibold px-3 mb-2">Operations</div>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                    <a href="/production/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 {% if '/production/' in request.path %}border-primary bg-white/10{% else %}border-transparent{% endif %}">
                         <i class="fas fa-boxes-stacked w-5"></i>
                         <span>Production & Inventory</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 border-transparent hover:border-primary">
+                    <a href="/training/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 border-l-2 {% if '/training/' in request.path %}border-primary bg-white/10{% else %}border-transparent{% endif %}">
                         <i class="fas fa-graduation-cap w-5"></i>
                         <span>Training & Skills</span>
                     </a>

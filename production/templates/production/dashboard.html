@@ -1,0 +1,116 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Production - Mera Pind Balle Balle ERP{% endblock %}
+{% block page_title %}Production Dashboard{% endblock %}
+
+{% block content %}
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Total Batches</p>
+                <p class="text-2xl font-poppins font-bold text-gray-800 mt-1">{{ total_batches }}</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <i class="fas fa-layer-group text-primary text-xl"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">In Progress</p>
+                <p class="text-2xl font-poppins font-bold text-gray-800 mt-1">{{ in_progress }}</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                <i class="fas fa-spinner text-blue-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Low Stock Items</p>
+                <p class="text-2xl font-poppins font-bold text-gray-800 mt-1">{{ low_stock }}</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
+                <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Quality Pass Rate</p>
+                <p class="text-2xl font-poppins font-bold text-gray-800 mt-1">{{ quality_pass_rate }}%</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
+    <!-- Production Batches Table -->
+    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary overflow-hidden">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-poppins font-semibold text-gray-800">Production Batches</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-gray-100">
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">ID</th>
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">Product</th>
+                        <th class="text-left py-2 px-3 text-gray-500 font-medium">Village</th>
+                        <th class="text-center py-2 px-3 text-gray-500 font-medium">Qty</th>
+                        <th class="text-center py-2 px-3 text-gray-500 font-medium">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for batch in batches %}
+                    <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                        <td class="py-2 px-3 font-medium text-primary">{{ batch.id }}</td>
+                        <td class="py-2 px-3 text-gray-800">{{ batch.product }}</td>
+                        <td class="py-2 px-3 text-gray-600">{{ batch.village }}</td>
+                        <td class="py-2 px-3 text-center text-gray-600">{{ batch.quantity }} {{ batch.unit }}</td>
+                        <td class="py-2 px-3 text-center">
+                            {% if batch.status == 'Completed' %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-700">Completed</span>
+                            {% elif batch.status == 'In Progress' %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-700">In Progress</span>
+                            {% else %}
+                            <span class="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-700">Scheduled</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Low Stock Alerts -->
+    <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+        <h3 class="font-poppins font-semibold text-gray-800 mb-4">Low Stock Alerts</h3>
+        <div class="space-y-3">
+            {% for item in low_stock_items %}
+            <div class="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
+                <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-red-600"></i>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-800 text-sm">{{ item.name }}</p>
+                    <p class="text-xs text-gray-500">{{ item.stock_kg }} {{ item.unit }} remaining</p>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-gray-500 text-sm">No low stock alerts</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
